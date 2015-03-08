@@ -4,43 +4,38 @@ package io.aif.associations.builder;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.OptionalDouble;
+import java.util.*;
 
 class ExperimentsConnectionsGraphReducer<T> {
     
     public Graph<T, Double> reduce(final Graph<T, List<Double>> originalGraph) {
         final Graph<T, Double> resultsGraph = new SparseGraph<>();
 
-        originalGraph.getVertices().stream().forEach(vertex -> {
-            
-        });
+        originalGraph.getVertices().stream().forEach(vertex -> convertVertex(vertex, originalGraph, resultsGraph));
+        normalize(resultsGraph);
         
-        distancesGraph.keySet().stream().forEach(key -> {
-            results.put(key, new HashMap<>());
-            distancesGraph
-                    .get(key)
-                    .keySet()
-                    .forEach(innerKey -> {
-                        results.get(key).put(innerKey, distancesGraph.get(key).get(innerKey).stream().mapToDouble(x -> x).sum());
-                    });
-        });
-        final Double maxConnection = results.keySet().stream().mapToDouble(key -> {
-            final OptionalDouble optMax = results.get(key).keySet().stream().mapToDouble(results.get(key)::get).max();
-            if (optMax.isPresent()) return optMax.getAsDouble();
-            return .0;
-        }).max().getAsDouble();
-
-        results.keySet().forEach(key -> {
-            results.get(key).keySet().forEach(innerKey -> {
-                results.get(key).put(innerKey, results.get(key).get(innerKey) / maxConnection);
+        return resultsGraph;
+    }
+    
+    private void normalize(final Graph<T, Double> graph) {
+        final Double maxEdge = graph.getEdges().stream().max(Double::compare).get();
+        graph.getVertices().forEach(vertex -> {
+            graph.getNeighbors(vertex).forEach(neighbor -> {
+                final Double edge = graph.findEdge(vertex, neighbor);
+                graph.removeEdge(edge);
+                graph.addEdge(edge / maxEdge, vertex, neighbor);
             });
         });
-
-        return results;
+    }
+    
+    private void convertVertex(final T vertex, final Graph<T, List<Double>> srcGraph, final Graph<T, Double> dstGraph) {
+        if (!dstGraph.containsVertex(vertex)) dstGraph.addVertex(vertex);        
         
+        srcGraph.getNeighbors(vertex).forEach(neighbor -> {
+            if (!dstGraph.containsVertex(neighbor)) dstGraph.addVertex(neighbor);
+            final Double edge = srcGraph.findEdge(vertex, neighbor).stream().mapToDouble(x -> x).sum();
+            dstGraph.addEdge(edge, vertex, neighbor);
+        });
     }
     
 }

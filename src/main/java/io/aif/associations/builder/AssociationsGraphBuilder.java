@@ -11,6 +11,8 @@ import java.util.List;
 
 public class AssociationsGraphBuilder<T> implements IAssociationsGraphBuilder<T> {
     
+    private final ExperimentsConnectionsGraphReducer<T> experimentsConnectionsGraphReducer = new ExperimentsConnectionsGraphReducer<>();
+    
     private final ExperimentsConnectionsGraphBuilder<T> experimentsConnectionsGraphBuilder;
 
     public AssociationsGraphBuilder(final IDistanceMultiplierIncrementCalculator<T> distanceMultiplierIncrementCalculator) {
@@ -24,6 +26,7 @@ public class AssociationsGraphBuilder<T> implements IAssociationsGraphBuilder<T>
     @Override
     public Graph<IAssociationVertex<T>, IAssociationEdge> buildGraph(final List<T> experiments) {
         final Graph<T, List<Double>> experimentsConnectionsGraph = experimentsConnectionsGraphBuilder.build(experiments);
+        final Graph<T, Double> reducedExperimentsConnectionsGraph = experimentsConnectionsGraphReducer.reduce(experimentsConnectionsGraph);
         
         return null;
     }
