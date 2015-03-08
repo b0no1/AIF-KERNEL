@@ -11,11 +11,11 @@ import java.awt.geom.Arc2D;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ToResultGraphMapper<T> {
+class ToResultGraphMapper<T> {
     
     private final IVertexWeightCalculator<T> vertexWeightCalculator;
 
-    public ToResultGraphMapper(IVertexWeightCalculator<T> vertexWeightCalculator) {
+    public ToResultGraphMapper(final IVertexWeightCalculator<T> vertexWeightCalculator) {
         this.vertexWeightCalculator = vertexWeightCalculator;
     }
 

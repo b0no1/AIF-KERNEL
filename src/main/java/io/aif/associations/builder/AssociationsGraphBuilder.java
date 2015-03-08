@@ -2,6 +2,9 @@ package io.aif.associations.builder;
 
 
 import edu.uci.ics.jung.graph.Graph;
+import io.aif.associations.calculators.edge.PredefinedEdgeWeightCalculator;
+import io.aif.associations.calculators.vertex.ConnectionBasedWeightCalculator;
+import io.aif.associations.calculators.vertex.IVertexWeightCalculator;
 import io.aif.associations.model.IAssociationEdge;
 import io.aif.associations.model.IAssociationVertex;
 import io.aif.associations.model.IAssociationsGraphBuilder;
@@ -19,7 +22,7 @@ public class AssociationsGraphBuilder<T> implements IAssociationsGraphBuilder<T>
         this.experimentsConnectionsGraphBuilder = new ExperimentsConnectionsGraphBuilder<>(distanceMultiplierIncrementCalculator);
     }
 
-    public AssociationsGraphBuilder() {
+    public AssociationsGraphBuilder(final IVertexWeightCalculator<T> vertexWeightCalculator) {
         this(IDistanceMultiplierIncrementCalculator.<T>createDefaultCalculator());
     }
 
@@ -28,7 +31,13 @@ public class AssociationsGraphBuilder<T> implements IAssociationsGraphBuilder<T>
         final Graph<T, List<Double>> experimentsConnectionsGraph = experimentsConnectionsGraphBuilder.build(experiments);
         final Graph<T, Double> reducedExperimentsConnectionsGraph = experimentsConnectionsGraphReducer.reduce(experimentsConnectionsGraph);
         
-        return null;
+        final PredefinedEdgeWeightCalculator<T> predefinedEdgeWeightCalculator = new PredefinedEdgeWeightCalculator<>(reducedExperimentsConnectionsGraph);
+        
+        final IVertexWeightCalculator<T> vertexWeightCalculator = new ConnectionBasedWeightCalculator<>(reducedExperimentsConnectionsGraph, predefinedEdgeWeightCalculator);
+        
+        final ToResultGraphMapper<T> toResultGraphMapper = new ToResultGraphMapper<>(vertexWeightCalculator);
+        
+        return toResultGraphMapper.map(reducedExperimentsConnectionsGraph);
     }
     
 }
