@@ -1,9 +1,11 @@
 package io.aif.associations.builder;
 
 
-import edu.uci.ics.jung.graph.Graph;
-import edu.uci.ics.jung.graph.SparseGraph;
+import io.aif.associations.graph.AssociationGraph;
+import io.aif.associations.model.IAssociationEdge;
+import io.aif.associations.model.IAssociationVertex;
 import io.aif.associations.model.IDistanceMultiplierIncrementCalculator;
+import io.aif.associations.model.IGraph;
 
 import java.util.*;
 import java.util.stream.IntStream;
@@ -35,8 +37,8 @@ class ExperimentsConnectionsGraphBuilder<T> {
                 DEFAULT_CONNECT_AHEAD);
     }
     
-    public Graph<T, List<Double>> build(final List<T> experiments) {
-        final Graph<T, List<Double>> graph = new SparseGraph<>();
+    public Map<T, Map<T, List<Double>>> build(final List<T> experiments) {
+        final Map<T, Map<T, List<Double>>> graph = new HashMap<>();
 
         final int connectAheadNormalized = calculateNormalizedConnectAhead(experiments);
 
@@ -47,25 +49,22 @@ class ExperimentsConnectionsGraphBuilder<T> {
         return graph;
     }
     
-    private void addDataToGraph(final Graph<T, List<Double>> graph, 
+    private void addDataToGraph(final Map<T, Map<T, List<Double>>> graph,
                                 final List<T> experiments,
                                 final int startPosition,
                                 final int connectAhead) {
         final T srcVertex = experiments.get(startPosition);
         double multiplier = 1;
-        if (!graph.containsVertex(srcVertex)) graph.addVertex(srcVertex);
+        if (!graph.containsKey(srcVertex)) graph.put(srcVertex, new HashMap<>());
         for (int index = 0; index < connectAhead; index++) {
             final int position = startPosition + index + 1;
             if (position >= experiments.size()) return;
             
             final T destVertex = experiments.get(position);
-            if (!graph.containsVertex(destVertex)) graph.addVertex(destVertex);
+            if (!graph.get(srcVertex).containsKey(destVertex)) graph.get(srcVertex).put(destVertex, new ArrayList<>());
             
             final double distance = (index + 1) * multiplier;
-            if (graph.findEdge(srcVertex, destVertex) == null) {
-                graph.addEdge(new ArrayList<>(), srcVertex, destVertex);
-            }
-            final List<Double> edge = graph.findEdge(srcVertex, destVertex);
+            final List<Double> edge = graph.get(srcVertex).get(destVertex);
             edge.add(distance);
             
             multiplier += distanceMultiplierIncrementCalculator.calculateMultiplierIncrement(destVertex);

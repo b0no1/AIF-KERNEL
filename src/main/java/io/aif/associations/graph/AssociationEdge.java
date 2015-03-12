@@ -1,4 +1,4 @@
-package io.aif.associations.builder;
+package io.aif.associations.graph;
 
 
 import io.aif.associations.model.IAssociationEdge;
