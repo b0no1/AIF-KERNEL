@@ -7,17 +7,17 @@ import io.aif.associations.model.*;
 import java.util.List;
 import java.util.Map;
 
-public class AssociationsGraphBuilder<T> implements IAssociationsGraphBuilder<T> {
+public class AssociationsGraphBuilderOld<T> implements IAssociationsGraphBuilder<T> {
     
     private final ExperimentsConnectionsGraphReducer<T> experimentsConnectionsGraphReducer = new ExperimentsConnectionsGraphReducer<>();
     
-    private final ExperimentsConnectionsGraphBuilder<T> experimentsConnectionsGraphBuilder;
+    private final ExperimentsConnectionsGraphBuilderOld<T> experimentsConnectionsGraphBuilder;
 
-    public AssociationsGraphBuilder(final IDistanceMultiplierIncrementCalculator<T> distanceMultiplierIncrementCalculator) {
-        this.experimentsConnectionsGraphBuilder = new ExperimentsConnectionsGraphBuilder<>(distanceMultiplierIncrementCalculator);
+    public AssociationsGraphBuilderOld(final IDistanceMultiplierIncrementCalculator<T> distanceMultiplierIncrementCalculator) {
+        this.experimentsConnectionsGraphBuilder = new ExperimentsConnectionsGraphBuilderOld<>(distanceMultiplierIncrementCalculator);
     }
 
-    public AssociationsGraphBuilder() {
+    public AssociationsGraphBuilderOld() {
         this(IDistanceMultiplierIncrementCalculator.<T>createDefaultCalculator());
     }
 

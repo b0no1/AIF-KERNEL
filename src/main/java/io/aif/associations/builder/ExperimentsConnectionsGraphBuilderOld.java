@@ -1,16 +1,12 @@
 package io.aif.associations.builder;
 
 
-import io.aif.associations.graph.AssociationGraph;
-import io.aif.associations.model.IAssociationEdge;
-import io.aif.associations.model.IAssociationVertex;
 import io.aif.associations.model.IDistanceMultiplierIncrementCalculator;
-import io.aif.associations.model.IGraph;
 
 import java.util.*;
 import java.util.stream.IntStream;
 
-class ExperimentsConnectionsGraphBuilder<T> {
+class ExperimentsConnectionsGraphBuilderOld<T> {
     
     private static final int DEFAULT_CONNECT_AHEAD = 5;
     
@@ -18,8 +14,8 @@ class ExperimentsConnectionsGraphBuilder<T> {
 
     private final IDistanceMultiplierIncrementCalculator<T> distanceMultiplierIncrementCalculator;
 
-    public ExperimentsConnectionsGraphBuilder(final IDistanceMultiplierIncrementCalculator<T> distanceMultiplierIncrementCalculator,
-                                              final int connectAhead) {
+    public ExperimentsConnectionsGraphBuilderOld(final IDistanceMultiplierIncrementCalculator<T> distanceMultiplierIncrementCalculator,
+                                                 final int connectAhead) {
         this.distanceMultiplierIncrementCalculator = distanceMultiplierIncrementCalculator;
         if (connectAhead <= 0)
             this.connectAhead = DEFAULT_CONNECT_AHEAD;
@@ -27,12 +23,12 @@ class ExperimentsConnectionsGraphBuilder<T> {
             this.connectAhead = connectAhead;
     }
 
-    public ExperimentsConnectionsGraphBuilder(final IDistanceMultiplierIncrementCalculator<T> distanceMultiplierIncrementCalculator) {
+    public ExperimentsConnectionsGraphBuilderOld(final IDistanceMultiplierIncrementCalculator<T> distanceMultiplierIncrementCalculator) {
         this(distanceMultiplierIncrementCalculator, DEFAULT_CONNECT_AHEAD);
     }
 
 
-    public ExperimentsConnectionsGraphBuilder() {
+    public ExperimentsConnectionsGraphBuilderOld() {
         this(IDistanceMultiplierIncrementCalculator.<T>createDefaultCalculator(), 
                 DEFAULT_CONNECT_AHEAD);
     }
