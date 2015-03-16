@@ -3,7 +3,7 @@ package io.aif.associations.builder
 import scala.annotation.tailrec
 
 
-class ExperimentsConnectionsGraphBuilder[T](distanceMultiplierIncrementCalculator: T => Double,
+class ExperimentsConnectionsGraphBuilder[T](distanceMultiplierIncrementCalculator: T => Double = v => 1,
                                             connectAhead: Int = 5) {
 
   def build(experiments: List[T]): Map[T, Map[T, List[Double]]] = {
