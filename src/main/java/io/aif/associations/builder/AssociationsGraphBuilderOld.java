@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class AssociationsGraphBuilderOld<T> implements IAssociationsGraphBuilder<T> {
     
-    private final ExperimentsConnectionsGraphReducer<T> experimentsConnectionsGraphReducer = new ExperimentsConnectionsGraphReducer<>();
+    private final ExperimentsConnectionsGraphReducerOld<T> experimentsConnectionsGraphReducer = new ExperimentsConnectionsGraphReducerOld<>();
     
     private final ExperimentsConnectionsGraphBuilderOld<T> experimentsConnectionsGraphBuilder;
 

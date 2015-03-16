@@ -4,7 +4,7 @@ package io.aif.associations.builder;
 import java.util.*;
 import java.util.stream.Collectors;
 
-class ExperimentsConnectionsGraphReducer<T> {
+class ExperimentsConnectionsGraphReducerOld<T> {
     
     public Map<T, Map<T, Double>> reduce(final Map<T, Map<T, List<Double>>> originalGraph) {
         final Map<T, Map<T, Double>> resultsGraph = convertGraph(originalGraph);
