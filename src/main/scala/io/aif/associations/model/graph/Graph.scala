@@ -1,7 +1,7 @@
 package io.aif.associations.model.graph
 
 
-class Graph[V, E](raw: Map[V, Map[V, E]]) {
+class Graph[V, E](raw: Map[V, Map[V, E]], vertexWeightCalculator: V => Double = (v) => 0.0) {
 
   def isEmpty: Boolean = raw isEmpty
 
@@ -11,8 +11,10 @@ class Graph[V, E](raw: Map[V, Map[V, E]]) {
 
   def edge(from: V, to: V): Option[E] = raw.get(from).get get(to)
 
-  def mutate[V2, E2](f: Map[V, Map[V, E]] => Map[V2, Map[V2, E2]]) = new Graph[V2, E2](f(raw))
-
   def rawData = raw
+
+  def weight(vertex: V) = vertexWeightCalculator(vertex)
+
+  def size = raw.size
 
 }

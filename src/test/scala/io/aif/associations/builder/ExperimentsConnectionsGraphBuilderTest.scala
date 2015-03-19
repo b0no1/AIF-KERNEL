@@ -24,7 +24,7 @@ class ExperimentsConnectionsGraphBuilderTest extends FunSuite with BeforeAndAfte
   test("verifying the build process with two same elements") {
     val result = experimentsConnectionsGraphBuilder build 1 :: 1 :: Nil
     assert (result.size == 1)
-    assert (result.get(1).get isEmpty)
+    assert (result.neigbors(1) isEmpty)
   }
 
   test("verifying the build process with two different elements") {
