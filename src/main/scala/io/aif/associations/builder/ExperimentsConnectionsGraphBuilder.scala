@@ -24,8 +24,9 @@ class ExperimentsConnectionsGraphBuilder[T](distanceMultiplierIncrementCalculato
       if ((distance >= end) || (experiments isEmpty) || currentExp == experiments.head) {
         results
       } else {
-        val newDistance = (distance + 1.0) * distanceMultiplierIncrementCalculator(experiments head)
-        addValueToMap(currentExp, experiments tail, newDistance, end, (results.updated(experiments head, results.getOrElse(experiments head, List()) ::: newDistance :: Nil)))
+        val head = experiments head
+        val newDistance = (distance + 1.0) * distanceMultiplierIncrementCalculator(head)
+        addValueToMap(currentExp, experiments tail, newDistance, end, (results.updated(head, newDistance :: results.getOrElse(head, List()))))
       }
       
     }
