@@ -1,22 +1,21 @@
 package io.aif.associations.builder
 
+import io.aif.associations.model.graph.Graph
+
 import scala.annotation.tailrec
 
 
 class ExperimentsConnectionsGraphBuilder[T](distanceMultiplierIncrementCalculator: T => Double = v => 1,
                                             connectAhead: Int = 5) {
 
-  def build(experiments: List[T]): Map[T, Map[T, List[Double]]] = {
+  def build(experiments: List[T]): Graph[T, List[Double]] = {
     
     @tailrec
     def process(experiments: List[T], result: Map[T, Map[T, List[Double]]]): Map[T, Map[T, List[Double]]] = {
-      if (experiments isEmpty) {
-        result
-        
-      } else {
-        val currentExperiment = experiments.head
-        process(experiments tail, result updated(currentExperiment, addValueToMap(experiments head, experiments tail, 1, connectAhead, result.getOrElse(currentExperiment, Map()))))
-        
+      experiments match {
+        case Nil => result
+        case currentExperiment :: rest =>
+          process(experiments tail, result updated(currentExperiment, addValueToMap(experiments head, experiments tail, 1, connectAhead, result.getOrElse(currentExperiment, Map()))))
       }
     }
     
@@ -31,7 +30,7 @@ class ExperimentsConnectionsGraphBuilder[T](distanceMultiplierIncrementCalculato
       
     }
 
-    process(experiments, Map())
+    new Graph[T, List[Double]](process(experiments, Map()))
   }
 
 }

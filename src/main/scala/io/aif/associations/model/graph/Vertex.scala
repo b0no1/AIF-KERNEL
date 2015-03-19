@@ -1,14 +1,10 @@
 package io.aif.associations.model.graph
 
 
-trait Vertex[V, E] {
+trait Vertex[V] {
 
   def value: V
 
   def weight: Double
-  
-  def neigbors: Iterable[V]
-
-  def edge(vertex: V): Option[E]
 
 }

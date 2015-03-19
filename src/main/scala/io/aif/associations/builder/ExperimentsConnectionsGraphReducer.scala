@@ -1,9 +1,11 @@
 package io.aif.associations.builder
 
+import io.aif.associations.model.graph.{Vertex, Graph}
+
 
 class ExperimentsConnectionsGraphReducer[T] {
   
-  def reduce(originalGraph: Map[T, Map[T, List[Double]]]): Map[T, Map[T, Double]] = {
+  def reduce(originalGraph: Graph[T, List[Double]]): Graph[T, Double] = {
     
     def convertVertexConnections(vertexConnections: Map[T, List[Double]]) = {
       vertexConnections.keys.map(key => (key, vertexConnections.get(key).get.sum )) toMap
@@ -22,11 +24,12 @@ class ExperimentsConnectionsGraphReducer[T] {
       graph mapValues(vertexConnections => vertexConnections.mapValues(weight => ((newMax - (weight - min)) / newMax)))
     }
 
-    if (! originalGraph.isEmpty ) {
-      val recalculateGraph = originalGraph.mapValues(convertVertexConnections)
-      normalize(recalculateGraph, max(recalculateGraph), min(recalculateGraph))
+    val rawData = originalGraph.rawData
+    if (! rawData.isEmpty ) {
+      val recalculateGraph = rawData.mapValues(convertVertexConnections)
+      new Graph[T, Double](normalize(recalculateGraph, max(recalculateGraph), min(recalculateGraph)))
     } else {
-      Map()
+      new Graph[T, Double](Map())
     }
   }
 
