@@ -3,8 +3,8 @@ package io.aif.associations.calculators.edge
 import io.aif.associations.model.graph.Graph
 
 
-class PredefinedEdgeWeightCalculator[T](graph: Graph[T, Double]) extends EdgeWeightCalculator[T] {
+class PredefinedEdgeWeightCalculator[T](graph: Graph[T, Double]) {
 
-  override def calculate(from: T, to: T): Option[Double] = graph.edge(from, to)
+  def calculate(from: T, to: T): Option[Double] = graph.edge(from, to)
 
 }
