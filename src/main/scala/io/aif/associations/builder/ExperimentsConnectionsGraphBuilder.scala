@@ -11,7 +11,7 @@ class ExperimentsConnectionsGraphBuilder[T](distanceMultiplierIncrementCalculato
   def build(experiments: List[T]): Graph[T, List[Double]] = {
     
     @tailrec
-    def process(experiments: List[T], result: Map[T, Map[T, List[Double]]]): Map[T, Map[T, List[Double]]] = {
+    def process(experiments: List[T], result: Graph[T, List[Double]]): Graph[T, List[Double]] = {
       experiments match {
         case Nil => result
         case currentExperiment :: rest =>

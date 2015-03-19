@@ -1,18 +1,49 @@
 package io.aif.associations.model.graph
 
 
-class Graph[V, E](raw: Map[V, Map[V, E]]) {
+trait Graph[V, E] {
 
-  def isEmpty: Boolean = raw isEmpty
+  def vertexes: List[V]
 
-  def vertexes: List[V] = raw.keys toList
+  def edge(from: V, to: V): Option[E]
 
-  def neigbors(vertex: V): List[V] = raw.get(vertex).get.keys toList
+  def addVertex(vertex: V): Graph[V, E]
 
-  def edge(from: V, to: V): Option[E] = raw.get(from).get get(to)
+  def addEdge(from: V, to: V, edge: E): Graph[V, E]
 
-  def mutate[V2, E2](f: Map[V, Map[V, E]] => Map[V2, Map[V2, E2]]) = new Graph[V2, E2](f(raw))
+}
 
-  def rawData = raw
+
+object EmptyGraph extends Graph[Any, Any] {
+
+  override def vertexes = Nil
+
+  override def edge(from: Any, to: Any) = Option.empty
+
+  override def addEdge(from: Any, to: Any, edge: Any): Graph[Any, Any] = throw new NoSuchElementException()
+
+  override def addVertex(vertex: Any): Graph[Any, Any] = return new NonEmptyGraph[Any, Any](vertex, Map(), EmptyGraph)
+
+}
+
+
+class NonEmptyGraph[V, E](root: V, edges: Map[V, E], nextSubGraph: Graph[V, E] = EmptyGraph) extends Graph[V, E] {
+
+  override def vertexes: List[V] = root :: nextSubGraph.vertexes
+
+  override def edge(from: V, to: V): Option[E] = from match {
+    case root => edges get to
+    case _ => nextSubGraph.edge(from, to)
+  }
+
+  override def addEdge(from: V, to: V, edge: E): Graph[V, E] = from match {
+    case root => new NonEmptyGraph[V, E](root, edges updated(to, edge))
+    case _ => new NonEmptyGraph[V, E](root, edges, nextSubGraph addEdge(from, to, edge))
+  }
+
+  override def addVertex(vertex: V): Graph[V, E] = vertex match {
+    case root => this
+    case _ => new NonEmptyGraph[V, E](root, edges, nextSubGraph addVertex(vertex))
+  }
 
 }
