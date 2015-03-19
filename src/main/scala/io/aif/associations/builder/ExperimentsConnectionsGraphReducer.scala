@@ -1,6 +1,6 @@
 package io.aif.associations.builder
 
-import io.aif.associations.model.graph.{Vertex, Graph}
+import io.aif.associations.model.graph.Graph
 
 
 class ExperimentsConnectionsGraphReducer[T] {

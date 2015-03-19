@@ -2,7 +2,7 @@ package io.aif.associations.builder
 
 import io.aif.associations.calculators.edge.{PredefinedEdgeWeightCalculator, EdgeWeightCalculator}
 import io.aif.associations.calculators.vertex.ConnectionBasedWeightCalculator
-import io.aif.associations.model.graph.{Graph, Vertex, GraphBuilder}
+import io.aif.associations.model.graph.{Graph, GraphBuilder}
 
 
 class AssociationsGraphBuilder[V](experimentsConnectionsGraphBuilder: ExperimentsConnectionsGraphBuilder[V] = new ExperimentsConnectionsGraphBuilder[V](),
