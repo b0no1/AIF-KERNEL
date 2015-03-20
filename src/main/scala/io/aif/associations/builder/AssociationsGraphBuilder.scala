@@ -6,9 +6,9 @@ import io.aif.associations.model.graph.{Graph, GraphBuilder}
 
 
 class AssociationsGraphBuilder[V](experimentsConnectionsGraphBuilder: ExperimentsConnectionsGraphBuilder[V] = new ExperimentsConnectionsGraphBuilder[V](),
-                                  experimentsConnectionsGraphReducer: ExperimentsConnectionsGraphReducer[V] = new ExperimentsConnectionsGraphReducer[V]()) extends GraphBuilder[V, Double] {
+                                  experimentsConnectionsGraphReducer: ExperimentsConnectionsGraphReducer[V] = new ExperimentsConnectionsGraphReducer[V]()) {
 
-  override def build(experiments: List[V]): Graph[V, Double] = {
+  def build(experiments: List[V]): Graph[V, Double] = {
 
     val build: List[V] => Graph[V, List[Double]] = experimentsConnectionsGraphBuilder.build
     val reduce: Graph[V,List[Double]] => Graph[V, Double] = experimentsConnectionsGraphReducer.reduce

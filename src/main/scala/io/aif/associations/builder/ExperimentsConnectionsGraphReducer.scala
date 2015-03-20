@@ -25,11 +25,13 @@ class ExperimentsConnectionsGraphReducer[T] {
     }
 
     val rawData = originalGraph.rawData
-    if (! rawData.isEmpty ) {
-      val recalculateGraph = rawData.mapValues(convertVertexConnections)
-      new Graph[T, Double](normalize(recalculateGraph, max(recalculateGraph), min(recalculateGraph)))
-    } else {
-      new Graph[T, Double](Map())
+
+    rawData match {
+      case rawData.isEmpty => new Graph[T, Double](Map())
+      case _ => {
+        val recalculateGraph = rawData.mapValues(convertVertexConnections)
+        new Graph[T, Double](normalize(recalculateGraph, max(recalculateGraph), min(recalculateGraph)))
+      }
     }
   }
 
