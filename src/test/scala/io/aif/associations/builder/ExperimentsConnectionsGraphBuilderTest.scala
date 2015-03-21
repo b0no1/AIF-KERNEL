@@ -24,40 +24,40 @@ class ExperimentsConnectionsGraphBuilderTest extends FunSuite with BeforeAndAfte
   test("verifying the build process with two same elements") {
     val result = experimentsConnectionsGraphBuilder build 1 :: 1 :: Nil
     assert (result.size == 1)
-    assert (result.get(1).get isEmpty)
+    assert (result.neigbors(1) isEmpty)
   }
 
   test("verifying the build process with two different elements") {
     val result = experimentsConnectionsGraphBuilder build 1 :: 2 :: Nil
     assert (result.size == 2)
-    assert (result.get(1).get.get(2).get(0) == 2.0)
-    assert (result.get(2).get isEmpty)
+    assert (result.edge(1, 2).get(0) == 2.0)
+    assert (result.neigbors(2) isEmpty)
   }
 
   test("verifying the build process with three elements") {
     val result = experimentsConnectionsGraphBuilder build 1 :: 2 :: 2 :: Nil
     assert (result.size == 2)
-    assert (result.get(1).get.get(2).get(0) == 2.0)
-    assert (result.get(1).get.get(2).get(1) == 3.0)
-    assert (result.get(2).get isEmpty)
+    assert (result.edge(1, 2).get(0) == 2.0)
+    assert (result.edge(1, 2).get(1) == 3.0)
+    assert (result.neigbors(2) isEmpty)
   }
 
   test("verifying the build process with three elements and non default multilayer") {
     experimentsConnectionsGraphBuilder = new ExperimentsConnectionsGraphBuilder[Int](exp => if (exp == 1) 1.0 else 2.0)
     val result = experimentsConnectionsGraphBuilder build 1 :: 2 :: 2 :: Nil
     assert (result.size == 2)
-    assert (result.get(1).get.get(2).get(0) == 4.0)
-    assert (result.get(1).get.get(2).get(1) == 10.0)
-    assert (result.get(2).get isEmpty)
+    assert (result.edge(1, 2).get(0) == 4.0)
+    assert (result.edge(1, 2).get(1) == 10.0)
+    assert (result.neigbors(2) isEmpty)
   }
 
   test("verifying the build process with fore elements and non default multilayer") {
     experimentsConnectionsGraphBuilder = new ExperimentsConnectionsGraphBuilder[Int](exp => if (exp == 1) 1.0 else 2.0)
     val result = experimentsConnectionsGraphBuilder build 1 :: 2 :: 2 :: 2 :: Nil
     assert (result.size == 2)
-    assert (result.get(1).get.get(2).get(0) == 4.0)
-    assert (result.get(1).get.get(2).get(1) == 10.0)
-    assert (result.get(2).get isEmpty)
+    assert (result.edge(1, 2).get(0) == 4.0)
+    assert (result.edge(1, 2).get(1) == 10.0)
+    assert (result.neigbors(2) isEmpty)
   }
   
 }
