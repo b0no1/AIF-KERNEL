@@ -1,8 +1,6 @@
 package io.aif.associations.calculators.edge;
 
 
-import edu.uci.ics.jung.graph.Graph;
-
 import java.util.Map;
 
 public class PredefinedEdgeWeightCalculator<T> implements IEdgeWeightCalculator<T> {

@@ -54,34 +54,6 @@ public class AssociationGraph<T> implements IGraph<IAssociationVertex<T>, IAssoc
         return Optional.empty();
     }
 
-    public AssociationGraph<T> merge(final AssociationGraph<T> that) {
-        final Map<T, Map<T, Double>> newGrpah = Stream.of(this.graph, that.graph)
-                .map(Map::entrySet)
-                .flatMap(Collection::stream)
-                .collect(
-                        Collectors.toMap(
-                                Map.Entry::getKey,
-                                Map.Entry::getValue,
-                                AssociationGraph::merge2Connections
-                        )
-                );
-        return new AssociationGraph<>(newGrpah);
-    }
-
-    private static <T>Map<T, Double> merge2Connections(final Map<T, Double> left,
-                                                                                    final Map<T, Double> right) {
-        final Map<T, Double> newConnection = Stream.of(left, right)
-                .map(Map::entrySet)
-                .flatMap(Collection::stream)
-                .collect(
-                        Collectors.toMap(
-                                Map.Entry::getKey,
-                                Map.Entry::getValue,
-                                Double::sum )
-                );
-        return newConnection;
-    }
-
     private static class AssociationEdge implements IAssociationEdge {
 
         private final Double weight;

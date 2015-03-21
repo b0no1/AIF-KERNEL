@@ -16,9 +16,13 @@ class ExperimentsConnectionsGraphReducer<T> {
     
     private void normalize(final Map<T, Map<T, Double>> graph) {
         final Double maxEdge = graph.entrySet().stream().flatMap(entry -> entry.getValue().entrySet().stream()).mapToDouble(Map.Entry::getValue).max().getAsDouble();
+        final Double minEdge = graph.entrySet().stream().flatMap(entry -> entry.getValue().entrySet().stream()).mapToDouble(Map.Entry::getValue).min().getAsDouble();
+        final Double newMax = maxEdge - minEdge > 0 ? maxEdge - minEdge : maxEdge;
         graph.keySet().forEach(from ->
-            graph.get(from).keySet().forEach(to ->
-                graph.get(from).put(to, graph.get(from).get(to) / maxEdge)
+            graph.get(from).keySet().forEach(to -> {
+                        final Double weight = graph.get(from).get(to);
+                        graph.get(from).put(to, ((newMax - (weight - minEdge)) / newMax));
+                    }
             )
         );
     }
