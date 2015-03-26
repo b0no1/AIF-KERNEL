@@ -61,6 +61,9 @@ class ExperimentsConnectionsGraphBuilder<T> {
             if (position >= experiments.size()) return;
             
             final T destVertex = experiments.get(position);
+
+            if (destVertex.equals(srcVertex)) return;
+
             if (!graph.get(srcVertex).containsKey(destVertex)) graph.get(srcVertex).put(destVertex, new ArrayList<>());
             
             final double distance = (index + 1) * multiplier;
