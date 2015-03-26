@@ -1,11 +1,9 @@
 package io.aif.associations.calculators.vertex;
 
 
-import edu.uci.ics.jung.graph.Graph;
 import io.aif.associations.calculators.edge.IEdgeWeightCalculator;
 
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ConnectionBasedWeightCalculator<T> implements IVertexWeightCalculator<T> {
