@@ -15,6 +15,8 @@ class ExperimentsConnectionsGraphReducer<T> {
     }
     
     private void normalize(final Map<T, Map<T, Double>> graph) {
+        if (graph.isEmpty()) return;
+
         final Double maxEdge = graph.entrySet().stream().flatMap(entry -> entry.getValue().entrySet().stream()).mapToDouble(Map.Entry::getValue).max().getAsDouble();
         final Double minEdge = graph.entrySet().stream().flatMap(entry -> entry.getValue().entrySet().stream()).mapToDouble(Map.Entry::getValue).min().getAsDouble();
         final Double newMax = maxEdge - minEdge > 0 ? maxEdge - minEdge : maxEdge;
