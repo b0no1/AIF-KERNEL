@@ -80,8 +80,25 @@ public class ExperimentsConnectionsGraphBuilderTest {
 
         assertEquals(2, result.get(2).get(1).size());
         assertTrue(result.get(2).get(1).contains(1.));
-        System.out.println(result.get(2).get(1));
         assertTrue(result.get(2).get(1).contains(2.));
+    }
+
+    @Test
+    public void testBuildWithTwoSameExperimentsAmdOneNotSameAtTheBeginingWithNonDefaultMultiplexer() throws Exception {
+        final List<Integer> experiments = Arrays.asList(2, 1, 1);
+
+        final ExperimentsConnectionsGraphBuilder<Integer> experimentsConnectionsGraphBuilder = new ExperimentsConnectionsGraphBuilder<>(d -> d == 1 ? 4. : 1.);
+
+        final Map<Integer, Map<Integer, List<Double>>> result = experimentsConnectionsGraphBuilder.build(experiments);
+
+        assertTrue(result.containsKey(1));
+        assertTrue(result.containsKey(2));
+
+        assertTrue(result.get(1).isEmpty());
+
+        assertEquals(2, result.get(2).get(1).size());
+        assertTrue(result.get(2).get(1).contains(1.));
+        assertTrue(result.get(2).get(1).contains(10.));
     }
 
 }
