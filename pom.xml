@@ -4,7 +4,7 @@
   <groupId>io.aif</groupId>
   <artifactId>aif-kernel</artifactId>
   <packaging>jar</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
   <name>aif-kernel</name>
   <url>http://maven.apache.org</url>
     
@@ -40,7 +40,7 @@
         <repository>
             <id>snapshots</id>
             <name>libs-snapshot-local</name>
-            <url>http://artifactory.aif.io/artifactory/libs-snapshot-local</url>
+            <url>http://artifactory.aif.io/artifactory/libs-release-local</url>
         </repository>
     </distributionManagement>
     
