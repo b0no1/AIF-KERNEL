@@ -44,14 +44,27 @@ public class AssociationGraph<T> implements IGraph<IAssociationVertex<T>, IAssoc
 
     @Override
     public Set<IAssociationVertex<T>> getNeighbors(final IAssociationVertex<T> vertex) {
-        return graph.get(vertex).keySet().stream().map(cache::get).collect(Collectors.toSet());
+        final Map<T, Double> connection = graph.get(vertex);
+
+        if (Objects.isNull(connection)) {
+            return Collections.emptySet();
+        }
+
+        return connection.keySet().stream().map(cache::get).collect(Collectors.toSet());
     }
 
     @Override
     public Optional<IAssociationEdge> getEdge(final IAssociationVertex<T> from, final IAssociationVertex<T> to) {
-        if (graph.get(from).keySet().contains(to))
-            return Optional.of(new AssociationEdge(graph.get(from).get(to)));
+        if (graph.get(from.item()) == null) return Optional.empty();
+
+        if (graph.get(from.item()).keySet().contains(to.item()))
+            return Optional.of(new AssociationEdge(graph.get(from.item()).get(to.item())));
         return Optional.empty();
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return graph.isEmpty();
     }
 
     private static class AssociationEdge implements IAssociationEdge {

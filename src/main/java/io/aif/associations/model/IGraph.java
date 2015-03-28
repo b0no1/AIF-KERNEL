@@ -13,4 +13,6 @@ public interface IGraph<V, E> {
 
     public Optional<E> getEdge(final V from, final V to);
 
+    public boolean isEmpty();
+
 }
