@@ -4,6 +4,7 @@ package io.aif.associations.calculators.vertex;
 import io.aif.associations.calculators.edge.IEdgeWeightCalculator;
 
 import java.util.Map;
+import java.util.OptionalDouble;
 import java.util.stream.Collectors;
 
 public class ConnectionBasedWeightCalculator<T> implements IVertexWeightCalculator<T> {
@@ -23,11 +24,12 @@ public class ConnectionBasedWeightCalculator<T> implements IVertexWeightCalculat
 
     @Override
     public double calculate(final T vertex) {
-        final Double averageWeight = connections.get(vertex).keySet().stream()
+        final OptionalDouble optAverageWeight = connections.get(vertex).keySet().stream()
                 .mapToDouble(neighbor -> edgeWeightCalculator.calculate(vertex, neighbor))
-                .average()
-                .getAsDouble();
-        return 1. - Math.abs(TARGET - averageWeight);
+                .average();
+        if (!optAverageWeight.isPresent())
+            return .0;
+        return 1. - Math.abs(TARGET - optAverageWeight.getAsDouble());
     }
     
 }
