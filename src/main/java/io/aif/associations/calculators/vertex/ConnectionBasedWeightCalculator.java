@@ -24,9 +24,9 @@ public class ConnectionBasedWeightCalculator<T> implements IVertexWeightCalculat
     @Override
     public double calculate(final T vertex) {
         final Double averageWeight = connections.get(vertex).keySet().stream()
-                .map(neighbor -> edgeWeightCalculator.calculate(vertex, neighbor))
-                .collect(Collectors.summarizingDouble(x -> x))
-                .getAverage();
+                .mapToDouble(neighbor -> edgeWeightCalculator.calculate(vertex, neighbor))
+                .average()
+                .getAsDouble();
         return 1. - Math.abs(TARGET - averageWeight);
     }
     
