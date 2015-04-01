@@ -19,18 +19,14 @@ public class AssociationGraph<T> implements IGraph<IAssociationVertex<T>, IAssoc
 
     private final Map<T, IAssociationVertex<T>> cache = new HashMap<>();
 
-    private AssociationGraph(final Map<T, Map<T, Double>> graph) {
-        this(graph, new ConnectionBasedWeightCalculator<>(graph, new PredefinedEdgeWeightCalculator<>(graph)));
-    }
-
     private AssociationGraph(final Map<T, Map<T, Double>> graph,
                              final IVertexWeightCalculator<T> vertexWeightCalculator) {
         this.graph = graph;
         graph.keySet().forEach(key -> cache.put(key, new AssociationVertex<T>(key, vertexWeightCalculator.calculate(key))));
     }
 
-    public static <T>AssociationGraph generateGraph(final Map<T, Map<T, Double>> graph) {
-        return new AssociationGraph(graph);
+    public static <T>AssociationGraph generateGraph(final Map<T, Map<T, Double>> graph, final IVertexWeightCalculator<T> vertexWeightCalculator) {
+        return new AssociationGraph(graph, vertexWeightCalculator);
     }
 
     @Override

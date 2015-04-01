@@ -1,10 +1,8 @@
 package io.aif.associations.calculators.vertex;
 
 import io.aif.associations.calculators.edge.IEdgeWeightCalculator;
-import io.aif.associations.model.IAssociationVertex;
 import org.junit.Test;
 
-import java.awt.geom.Arc2D;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;

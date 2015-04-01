@@ -15,7 +15,7 @@ public class AssociationsGraphBuilderTest {
     public void testBuildWithEmptyExperimentsList() throws Exception {
         final List<Integer> experiments = Collections.emptyList();
 
-        final AssociationsGraphBuilder<Integer> associationsGraphBuilder = new AssociationsGraphBuilder<>();
+        final AssociationsGraphBuilder<Integer> associationsGraphBuilder = new AssociationsGraphBuilder<>(null);
 
         final IGraph<IAssociationVertex<Integer>, IAssociationEdge> result = associationsGraphBuilder.buildGraph(experiments);
 
@@ -26,7 +26,7 @@ public class AssociationsGraphBuilderTest {
     public void testBuildWithOneExperiment() throws Exception {
         final List<Integer> experiments = Arrays.asList(1);
 
-        final AssociationsGraphBuilder<Integer> associationsGraphBuilder = new AssociationsGraphBuilder<>();
+        final AssociationsGraphBuilder<Integer> associationsGraphBuilder = new AssociationsGraphBuilder<>(null);
 
         final IGraph<IAssociationVertex<Integer>, IAssociationEdge> result = associationsGraphBuilder.buildGraph(experiments);
 
@@ -39,7 +39,7 @@ public class AssociationsGraphBuilderTest {
     public void testBuildWithTwoSameExperiments() throws Exception {
         final List<Integer> experiments = Arrays.asList(1, 1);
 
-        final AssociationsGraphBuilder<Integer> associationsGraphBuilder = new AssociationsGraphBuilder<>();
+        final AssociationsGraphBuilder<Integer> associationsGraphBuilder = new AssociationsGraphBuilder<>(null);
 
         final IGraph<IAssociationVertex<Integer>, IAssociationEdge> result = associationsGraphBuilder.buildGraph(experiments);
 
@@ -52,7 +52,7 @@ public class AssociationsGraphBuilderTest {
     public void testBuildWithTwoSameExperimentsAmdOneNotSameAtTheEnd() throws Exception {
         final List<Integer> experiments = Arrays.asList(1, 1, 2);
 
-        final AssociationsGraphBuilder<Integer> associationsGraphBuilder = new AssociationsGraphBuilder<>();
+        final AssociationsGraphBuilder<Integer> associationsGraphBuilder = new AssociationsGraphBuilder<>(null);
 
         final IGraph<IAssociationVertex<Integer>, IAssociationEdge> result = associationsGraphBuilder.buildGraph(experiments);
 

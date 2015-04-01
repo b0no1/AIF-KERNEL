@@ -27,7 +27,8 @@ class ExperimentsConnectionsGraphReducer<T> {
         graph.keySet().forEach(from ->
             graph.get(from).keySet().forEach(to -> {
                         final Double weight = graph.get(from).get(to);
-                        graph.get(from).put(to, ((newMax - (weight - minEdge)) / newMax));
+//                        graph.get(from).put(to, ((newMax - (weight - minEdge)) / newMax));
+                        graph.get(from).put(to, weight / maxEdge);
                     }
             )
         );

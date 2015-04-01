@@ -11,6 +11,14 @@ public class CompositeWeightCalculator<T> implements IVertexWeightCalculator<T> 
         this.calculators = calculators;
     }
 
+    public CompositeWeightCalculator(final CompositeWeightCalculator calculator) {
+        this.calculators = calculator.calculators;
+    }
+
+    public void add(final IVertexWeightCalculator<T> calculator, final Double weight) {
+        calculators.put(calculator, weight);
+    }
+
     @Override
     public double calculate(final T vertex) {
         return calculators.entrySet().stream()
