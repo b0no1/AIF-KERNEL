@@ -1,9 +1,6 @@
 package io.aif.associations.graph;
 
 
-import io.aif.associations.calculators.edge.IEdgeWeightCalculator;
-import io.aif.associations.calculators.edge.PredefinedEdgeWeightCalculator;
-import io.aif.associations.calculators.vertex.ConnectionBasedWeightCalculator;
 import io.aif.associations.calculators.vertex.IVertexWeightCalculator;
 import io.aif.associations.model.IAssociationEdge;
 import io.aif.associations.model.IAssociationVertex;
@@ -11,21 +8,24 @@ import io.aif.associations.model.IGraph;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-public class AssociationGraph<T> implements IGraph<IAssociationVertex<T>, IAssociationEdge> {
+public class AssociationGraph<T> implements IGraph<IAssociationVertex<T>, Double> {
 
-    private final Map<T, Map<T, Double>> graph;
+    private final IGraph<INodeWithCount<T>, Double> graph;
 
     private final Map<T, IAssociationVertex<T>> cache = new HashMap<>();
 
-    private AssociationGraph(final Map<T, Map<T, Double>> graph,
+    private final Map<T, INodeWithCount<T>> mapping;
+
+    private AssociationGraph(final IGraph<INodeWithCount<T>, Double> graph,
                              final IVertexWeightCalculator<T> vertexWeightCalculator) {
         this.graph = graph;
-        graph.keySet().forEach(key -> cache.put(key, new AssociationVertex<T>(key, vertexWeightCalculator.calculate(key))));
+        final Map<T, Double> weights = vertexWeightCalculator.calculate(graph);
+        graph.getVertex().forEach(key -> cache.put(key.item(), new AssociationVertex<T>(key.item(), weights.get(key.item()))));
+        mapping = graph.getVertex().stream().collect(Collectors.toMap(k -> k.item(), v -> v));
     }
 
-    public static <T>AssociationGraph generateGraph(final Map<T, Map<T, Double>> graph, final IVertexWeightCalculator<T> vertexWeightCalculator) {
+    public static <T>AssociationGraph generateGraph(final IGraph<INodeWithCount<T>, Double> graph, final IVertexWeightCalculator<T> vertexWeightCalculator) {
         return new AssociationGraph(graph, vertexWeightCalculator);
     }
 
@@ -36,22 +36,21 @@ public class AssociationGraph<T> implements IGraph<IAssociationVertex<T>, IAssoc
 
     @Override
     public Set<IAssociationVertex<T>> getNeighbors(final IAssociationVertex<T> vertex) {
-        final Map<T, Double> connection = graph.get(vertex);
+        final Set<INodeWithCount<T>> neighbors = graph.getNeighbors(mapping.get(vertex.item()));
 
-        if (Objects.isNull(connection)) {
+        if (Objects.isNull(neighbors) || neighbors.isEmpty()) {
             return Collections.emptySet();
         }
 
-        return connection.keySet().stream().map(cache::get).collect(Collectors.toSet());
+        return neighbors.stream().map(cache::get).collect(Collectors.toSet());
     }
 
     @Override
-    public Optional<IAssociationEdge> getEdge(final IAssociationVertex<T> from, final IAssociationVertex<T> to) {
-        if (graph.get(from.item()) == null) return Optional.empty();
+    public Optional<Double> getEdge(final IAssociationVertex<T> from, final IAssociationVertex<T> to) {
+        if (!graph.getNeighbors(mapping.get(from.item())).contains(mapping.get(to.item())))
+            return Optional.empty();
 
-        if (graph.get(from.item()).keySet().contains(to.item()))
-            return Optional.of(new AssociationEdge(graph.get(from.item()).get(to.item())));
-        return Optional.empty();
+        return graph.getEdge(mapping.get(from.item()), mapping.get(to.item()));
     }
 
     @Override

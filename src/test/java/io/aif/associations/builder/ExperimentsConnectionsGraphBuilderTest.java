@@ -1,5 +1,7 @@
 package io.aif.associations.builder;
 
+import io.aif.associations.graph.INodeWithCount;
+import io.aif.associations.model.IGraph;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -18,7 +20,7 @@ public class ExperimentsConnectionsGraphBuilderTest {
 
         final ExperimentsConnectionsGraphBuilder<Integer> experimentsConnectionsGraphBuilder = new ExperimentsConnectionsGraphBuilder<>();
 
-        final Map<Integer, Map<Integer, List<Double>>> result = experimentsConnectionsGraphBuilder.build(experiments);
+        final IGraph<INodeWithCount<Integer>, Double> result = experimentsConnectionsGraphBuilder.build(experiments);
 
         assertTrue(result.isEmpty());
     }
@@ -29,10 +31,12 @@ public class ExperimentsConnectionsGraphBuilderTest {
 
         final ExperimentsConnectionsGraphBuilder<Integer> experimentsConnectionsGraphBuilder = new ExperimentsConnectionsGraphBuilder<>();
 
-        final Map<Integer, Map<Integer, List<Double>>> result = experimentsConnectionsGraphBuilder.build(experiments);
+        final IGraph<INodeWithCount<Integer>, Double> result = experimentsConnectionsGraphBuilder.build(experiments);
 
-        assertTrue(result.containsKey(1));
-        assertTrue(result.get(1).isEmpty());
+        final INodeWithCount<Integer> element = result.getVertex().iterator().next();
+
+        assertEquals(result.getVertex().size(), 1);
+        assertTrue(result.getNeighbors(element).isEmpty());
     }
 
     @Test
@@ -41,10 +45,12 @@ public class ExperimentsConnectionsGraphBuilderTest {
 
         final ExperimentsConnectionsGraphBuilder<Integer> experimentsConnectionsGraphBuilder = new ExperimentsConnectionsGraphBuilder<>();
 
-        final Map<Integer, Map<Integer, List<Double>>> result = experimentsConnectionsGraphBuilder.build(experiments);
+        final IGraph<INodeWithCount<Integer>, Double> result = experimentsConnectionsGraphBuilder.build(experiments);
 
-        assertTrue(result.containsKey(1));
-        assertTrue(result.get(1).isEmpty());
+        final INodeWithCount<Integer> element = result.getVertex().iterator().next();
+
+        assertEquals(result.getVertex().size(), 1);
+        assertTrue(result.getNeighbors(element).isEmpty());
     }
 
     @Test

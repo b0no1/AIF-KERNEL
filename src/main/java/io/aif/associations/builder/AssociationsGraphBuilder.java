@@ -1,44 +1,46 @@
 package io.aif.associations.builder;
 
 
-import io.aif.associations.calculators.edge.PredefinedEdgeWeightCalculator;
 import io.aif.associations.calculators.vertex.CompositeWeightCalculator;
 import io.aif.associations.calculators.vertex.ConnectionBasedWeightCalculator;
+import io.aif.associations.calculators.vertex.IVertexWeightCalculator;
 import io.aif.associations.graph.AssociationGraph;
+import io.aif.associations.graph.INodeWithCount;
 import io.aif.associations.model.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class AssociationsGraphBuilder<T> implements IAssociationsGraphBuilder<T> {
     
-    private final ExperimentsConnectionsGraphReducer<T> experimentsConnectionsGraphReducer = new ExperimentsConnectionsGraphReducer<>();
-    
     private final ExperimentsConnectionsGraphBuilder<T> experimentsConnectionsGraphBuilder;
 
-    private final CompositeWeightCalculator<T> compositeWeightCalculator;
+    private final Map<IVertexWeightCalculator<T>, Double> calculators;
 
     public AssociationsGraphBuilder(final IDistanceMultiplierIncrementCalculator<T> distanceMultiplierIncrementCalculator,
-                                    final CompositeWeightCalculator<T> compositeWeightCalculator) {
+                                    final Map<IVertexWeightCalculator<T>, Double> calculators) {
         this.experimentsConnectionsGraphBuilder = new ExperimentsConnectionsGraphBuilder<>(distanceMultiplierIncrementCalculator);
-        this.compositeWeightCalculator = compositeWeightCalculator;
+        this.calculators = calculators;
     }
 
-    public AssociationsGraphBuilder(final CompositeWeightCalculator<T> compositeWeightCalculator) {
-        this(IDistanceMultiplierIncrementCalculator.<T>createDefaultCalculator(), compositeWeightCalculator);
+    public AssociationsGraphBuilder(final Map<IVertexWeightCalculator<T>, Double> calculators) {
+        this(IDistanceMultiplierIncrementCalculator.<T>createDefaultCalculator(), calculators);
+    }
+
+    public AssociationsGraphBuilder() {
+        this(IDistanceMultiplierIncrementCalculator.<T>createDefaultCalculator(), new HashMap<>());
     }
 
     @Override
     public IGraph<IAssociationVertex<T>, IAssociationEdge> buildGraph(final List<T> experiments) {
 
-        final Map<T, Map<T, List<Double>>> experimentsConnectionsGraph = experimentsConnectionsGraphBuilder.build(experiments);
-        final Map<T, Map<T, Double>> reducedExperimentsConnectionsGraph = experimentsConnectionsGraphReducer.reduce(experimentsConnectionsGraph);
+        final IGraph<INodeWithCount<T>, Double> experimentsConnectionsGraph = experimentsConnectionsGraphBuilder.build(experiments);
 
-        final CompositeWeightCalculator<T> compositeWeightCalculator = new CompositeWeightCalculator<>(this.compositeWeightCalculator);
-        compositeWeightCalculator.add(new ConnectionBasedWeightCalculator<>(reducedExperimentsConnectionsGraph, new PredefinedEdgeWeightCalculator<>(reducedExperimentsConnectionsGraph)), 1.);
+        final CompositeWeightCalculator<T> compositeWeightCalculator = new CompositeWeightCalculator<>(calculators);
+        compositeWeightCalculator.add(new ConnectionBasedWeightCalculator<>(), 1.);
 
-        return AssociationGraph.generateGraph(reducedExperimentsConnectionsGraph, compositeWeightCalculator);
+        return AssociationGraph.generateGraph(experimentsConnectionsGraph, compositeWeightCalculator);
     }
     
 }

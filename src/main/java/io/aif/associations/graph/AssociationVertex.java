@@ -23,5 +23,4 @@ class AssociationVertex<T> implements IAssociationVertex<T> {
     public T item() {
         return value;
     }
-    
 }

@@ -1,7 +1,11 @@
 package io.aif.associations.calculators.vertex;
 
 
+import io.aif.associations.graph.INodeWithCount;
+import io.aif.associations.model.IGraph;
+
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class CompositeWeightCalculator<T> implements IVertexWeightCalculator<T> {
 
@@ -11,20 +15,20 @@ public class CompositeWeightCalculator<T> implements IVertexWeightCalculator<T> 
         this.calculators = calculators;
     }
 
-    public CompositeWeightCalculator(final CompositeWeightCalculator calculator) {
-        this.calculators = calculator.calculators;
-    }
-
     public void add(final IVertexWeightCalculator<T> calculator, final Double weight) {
         calculators.put(calculator, weight);
     }
 
     @Override
-    public double calculate(final T vertex) {
-        return calculators.entrySet().stream()
-                .mapToDouble(entry -> entry.getKey().calculate(vertex) * entry.getValue())
-                .average()
-                .getAsDouble();
+    public Map<T, Double> calculate(final IGraph<INodeWithCount<T>, Double> vertexes) {
+        final Map<T, Double> results = calculators.keySet().stream().map(calculator -> {
+            final Map<T, Double> result = calculator.calculate(vertexes);
+            return result.keySet()
+                    .stream()
+                    .collect(Collectors.toMap(k -> k, k -> result.get(k) * calculators.get(calculator)));
+        }).flatMap(map -> map.entrySet().stream())
+                .collect(Collectors.toMap(k -> k.getKey(), k -> k.getValue(), (k1, k2) -> k1 + k2));
+        return results.keySet().stream().collect(Collectors.toMap(k -> k, k -> results.get(k) / calculators.size()));
     }
 
 }

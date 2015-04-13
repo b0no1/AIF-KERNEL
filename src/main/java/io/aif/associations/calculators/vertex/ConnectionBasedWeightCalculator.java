@@ -1,44 +1,33 @@
 package io.aif.associations.calculators.vertex;
 
 
-import io.aif.associations.calculators.edge.IEdgeWeightCalculator;
+import io.aif.associations.graph.INodeWithCount;
+import io.aif.associations.model.IGraph;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.OptionalDouble;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ConnectionBasedWeightCalculator<T> implements IVertexWeightCalculator<T> {
-    
-    private final Map<T, Map<T, Double>> connections;
-    
-    private final IEdgeWeightCalculator<T> edgeWeightCalculator;
-
-    public ConnectionBasedWeightCalculator(final Map<T, Map<T, Double>> connections,
-                                           final IEdgeWeightCalculator<T> edgeWeightCalculator) {
-        this.connections = connections;
-        this.edgeWeightCalculator = edgeWeightCalculator;
-    }
 
     @Override
-    public double calculate(final T vertex) {
-        if (!connections.containsKey(vertex)) return .0;
+    public Map<T, Double> calculate(final IGraph<INodeWithCount<T>, Double> graph) {
+        final Map<T, Double> weights = graph.getVertex().stream().collect(Collectors.toMap(k -> k.item(), k -> calculate(k, graph)));
+        final Optional<Double> optMax = weights.values().stream().max(Double::compare);
+        if (!optMax.isPresent()) return Collections.emptyMap();
+        return weights.keySet().stream().collect(Collectors.toMap(k -> k, k -> weights.get(k) / optMax.get()));
+    }
 
-        if (connections.get(vertex).keySet().size() <= 2) return .0;
+    private double calculate(final INodeWithCount<T> vertex, final IGraph<INodeWithCount<T>, Double> graph) {
+        if (!graph.getNeighbors(vertex).isEmpty()) return .0;
 
-        final OptionalDouble optAverageWeight = connections.get(vertex).keySet().stream()
-                .mapToDouble(neighbor -> edgeWeightCalculator.calculate(vertex, neighbor))
-                .average();
+        if (graph.getNeighbors(vertex).size() <= 2) return .0;
+
+        final OptionalDouble optAverageWeight = graph.getNeighbors(vertex).stream()
+                .mapToDouble(neighbor -> graph.getEdge(vertex, neighbor).get())
+                .max();
         if (!optAverageWeight.isPresent())
             return .0;
-        return (/*Math.sqrt(((double)count.get(vertex)) / (double)max) */ optAverageWeight.getAsDouble()) / (double)connections.get(vertex).size();
-//        final Optional<Double> maxWeightOpt = connections.get(vertex).values().stream().max(Double::compare);
-//        final Optional<Double> minWeightOpt = connections.get(vertex).values().stream().min(Double::compare);
-//
-//        if (!maxWeightOpt.isPresent() || !minWeightOpt.isPresent()) return .0;
-//
-//        final double delta = maxWeightOpt.get() - minWeightOpt.get();
-//
-//        return(((double)count.get(vertex) / (double)max) * delta) / connections.get(vertex).size();
+        return (optAverageWeight.getAsDouble()) / ((double)graph.getNeighbors(vertex).size() * (double)vertex.count());
     }
     
 }
