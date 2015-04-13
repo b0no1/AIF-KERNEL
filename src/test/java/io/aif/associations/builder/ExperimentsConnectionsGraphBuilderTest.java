@@ -4,10 +4,7 @@ import io.aif.associations.graph.INodeWithCount;
 import io.aif.associations.model.IGraph;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -59,16 +56,14 @@ public class ExperimentsConnectionsGraphBuilderTest {
 
         final ExperimentsConnectionsGraphBuilder<Integer> experimentsConnectionsGraphBuilder = new ExperimentsConnectionsGraphBuilder<>();
 
-        final Map<Integer, Map<Integer, List<Double>>> result = experimentsConnectionsGraphBuilder.build(experiments);
+        final IGraph<INodeWithCount<Integer>, Double> result = experimentsConnectionsGraphBuilder.build(experiments);
 
-        assertTrue(result.containsKey(1));
-        assertTrue(result.containsKey(2));
+        final INodeWithCount<Integer> element1 = result.getVertex().stream().filter(i -> i.item() == 1).findFirst().get();
+        final INodeWithCount<Integer> element2 = result.getVertex().stream().filter(i -> i.item() == 2).findFirst().get();
 
-        assertTrue(result.get(1).containsKey(2));
-        assertEquals(1, result.get(1).get(2).size());
-        assertTrue(result.get(1).get(2).contains(1.));
-
-        assertTrue(result.get(2).isEmpty());
+        assertEquals(result.getEdge(element1, element2), Optional.of(1.0));
+        assertEquals(result.getNeighbors(element1).size(), 1);
+        assertEquals(result.getNeighbors(element2).size(), 0);
     }
 
     @Test
@@ -77,16 +72,13 @@ public class ExperimentsConnectionsGraphBuilderTest {
 
         final ExperimentsConnectionsGraphBuilder<Integer> experimentsConnectionsGraphBuilder = new ExperimentsConnectionsGraphBuilder<>();
 
-        final Map<Integer, Map<Integer, List<Double>>> result = experimentsConnectionsGraphBuilder.build(experiments);
+        final IGraph<INodeWithCount<Integer>, Double> result = experimentsConnectionsGraphBuilder.build(experiments);
 
-        assertTrue(result.containsKey(1));
-        assertTrue(result.containsKey(2));
+        final INodeWithCount<Integer> element1 = result.getVertex().stream().filter(i -> i.item() == 1).findFirst().get();
+        final INodeWithCount<Integer> element2 = result.getVertex().stream().filter(i -> i.item() == 2).findFirst().get();
 
-        assertTrue(result.get(1).isEmpty());
-
-        assertEquals(2, result.get(2).get(1).size());
-        assertTrue(result.get(2).get(1).contains(1.));
-        assertTrue(result.get(2).get(1).contains(2.));
+        assertTrue(result.getNeighbors(element1).isEmpty());
+        assertEquals(result.getEdge(element2, element1), Optional.of(3.0));
     }
 
     @Test
@@ -95,16 +87,13 @@ public class ExperimentsConnectionsGraphBuilderTest {
 
         final ExperimentsConnectionsGraphBuilder<Integer> experimentsConnectionsGraphBuilder = new ExperimentsConnectionsGraphBuilder<>(d -> d == 1 ? 4. : 1.);
 
-        final Map<Integer, Map<Integer, List<Double>>> result = experimentsConnectionsGraphBuilder.build(experiments);
+        final IGraph<INodeWithCount<Integer>, Double> result = experimentsConnectionsGraphBuilder.build(experiments);
 
-        assertTrue(result.containsKey(1));
-        assertTrue(result.containsKey(2));
+        final INodeWithCount<Integer> element1 = result.getVertex().stream().filter(i -> i.item() == 1).findFirst().get();
+        final INodeWithCount<Integer> element2 = result.getVertex().stream().filter(i -> i.item() == 2).findFirst().get();
 
-        assertTrue(result.get(1).isEmpty());
-
-        assertEquals(2, result.get(2).get(1).size());
-        assertTrue(result.get(2).get(1).contains(1.));
-        assertTrue(result.get(2).get(1).contains(10.));
+        assertTrue(result.getNeighbors(element1).isEmpty());
+        assertEquals(result.getEdge(element2, element1), Optional.of(11.0));
     }
 
 }
