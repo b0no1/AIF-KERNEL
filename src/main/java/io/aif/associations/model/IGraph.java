@@ -1,9 +1,12 @@
 package io.aif.associations.model;
 
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public interface IGraph<V, E> {
 

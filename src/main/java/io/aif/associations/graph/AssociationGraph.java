@@ -21,7 +21,7 @@ public class AssociationGraph<T> implements IGraph<IAssociationVertex<T>, Double
                              final IVertexWeightCalculator<T> vertexWeightCalculator) {
         this.graph = graph;
         final Map<T, Double> weights = vertexWeightCalculator.calculate(graph);
-        graph.getVertex().forEach(key -> cache.put(key.item(), new AssociationVertex<T>(key.item(), weights.get(key.item()))));
+        graph.getVertex().forEach(key -> cache.put(key.item(), new AssociationVertex<>(key.item(), weights.get(key.item()))));
         mapping = graph.getVertex().stream().collect(Collectors.toMap(k -> k.item(), v -> v));
     }
 
@@ -56,21 +56,6 @@ public class AssociationGraph<T> implements IGraph<IAssociationVertex<T>, Double
     @Override
     public boolean isEmpty() {
         return graph.isEmpty();
-    }
-
-    private static class AssociationEdge implements IAssociationEdge {
-
-        private final Double weight;
-
-        public AssociationEdge(final Double weight) {
-            this.weight = weight;
-        }
-
-        @Override
-        public double weight() {
-            return weight;
-        }
-
     }
 
 }
