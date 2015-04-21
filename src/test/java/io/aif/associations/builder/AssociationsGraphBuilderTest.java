@@ -1,7 +1,5 @@
 package io.aif.associations.builder;
 
-import io.aif.associations.model.IAssociationEdge;
-import io.aif.associations.model.IAssociationVertex;
 import io.aif.associations.model.IGraph;
 import org.junit.Test;
 
@@ -17,7 +15,7 @@ public class AssociationsGraphBuilderTest {
 
         final AssociationsGraphBuilder<Integer> associationsGraphBuilder = new AssociationsGraphBuilder<>();
 
-        final IGraph<IAssociationVertex<Integer>, IAssociationEdge> result = associationsGraphBuilder.buildGraph(experiments);
+        final IGraph<Integer> result = associationsGraphBuilder.buildGraph(experiments);
 
         assertTrue(result.isEmpty());
     }
@@ -28,10 +26,10 @@ public class AssociationsGraphBuilderTest {
 
         final AssociationsGraphBuilder<Integer> associationsGraphBuilder = new AssociationsGraphBuilder<>();
 
-        final IGraph<IAssociationVertex<Integer>, IAssociationEdge> result = associationsGraphBuilder.buildGraph(experiments);
+        final IGraph<Integer> result = associationsGraphBuilder.buildGraph(experiments);
 
         assertEquals(result.getVertex().size(), 1);
-        assertEquals(result.getVertex().iterator().next().item(), (Integer)1);
+        assertEquals(result.getVertex().iterator().next(), (Integer)1);
         assertTrue(result.getNeighbors(result.getVertex().iterator().next()).isEmpty());
     }
 
@@ -41,10 +39,10 @@ public class AssociationsGraphBuilderTest {
 
         final AssociationsGraphBuilder<Integer> associationsGraphBuilder = new AssociationsGraphBuilder<>();
 
-        final IGraph<IAssociationVertex<Integer>, IAssociationEdge> result = associationsGraphBuilder.buildGraph(experiments);
+        final IGraph<Integer> result = associationsGraphBuilder.buildGraph(experiments);
 
         assertEquals(result.getVertex().size(), 1);
-        assertEquals(result.getVertex().iterator().next().item(), (Integer) 1);
+        assertEquals(result.getVertex().iterator().next(), (Integer) 1);
         assertTrue(result.getNeighbors(result.getVertex().iterator().next()).isEmpty());
     }
 
@@ -54,17 +52,17 @@ public class AssociationsGraphBuilderTest {
 
         final AssociationsGraphBuilder<Integer> associationsGraphBuilder = new AssociationsGraphBuilder<>();
 
-        final IGraph<IAssociationVertex<Integer>, IAssociationEdge> result = associationsGraphBuilder.buildGraph(experiments);
+        final IGraph<Integer> result = associationsGraphBuilder.buildGraph(experiments);
 
         assertEquals(result.getVertex().size(), 2);
 
-        final List<IAssociationVertex<Integer>> iterator = new ArrayList<>(result.getVertex());
-        final IAssociationVertex<Integer> firstVertex = iterator.get(0).item() == 1 ? iterator.get(0): iterator.get(1);
-        final IAssociationVertex<Integer> secondVertex = iterator.get(0).item() == 1 ? iterator.get(1): iterator.get(0);
+        final List<Integer> iterator = new ArrayList<>(result.getVertex());
+        final Integer firstVertex = iterator.get(0) == 1 ? iterator.get(0): iterator.get(1);
+        final Integer secondVertex = iterator.get(0) == 1 ? iterator.get(1): iterator.get(0);
 
-        assertTrue(result.getEdge(firstVertex, secondVertex).isPresent());
-        assertFalse(result.getEdge(secondVertex, firstVertex).isPresent());
-        assertEquals((Double) result.getEdge(firstVertex, secondVertex).get().weight(), (Double) 1.);
+        assertTrue(result.getEdgeWeight(firstVertex, secondVertex).isPresent());
+        assertFalse(result.getEdgeWeight(secondVertex, firstVertex).isPresent());
+        assertEquals((Double) result.getEdgeWeight(firstVertex, secondVertex).getAsDouble(), (Double) 1.);
 
     }
 

@@ -1,9 +1,6 @@
 package io.aif.associations.calculators.vertex;
 
 
-import io.aif.associations.graph.INodeWithCount;
-import io.aif.associations.model.IGraph;
-
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -20,9 +17,9 @@ public class CompositeWeightCalculator<T> implements IVertexWeightCalculator<T> 
     }
 
     @Override
-    public Map<T, Double> calculate(final IGraph<INodeWithCount<T>, Double> vertexes) {
+    public Map<T, Double> calculate(final Map<T, Map<T, Double>>  graph, final Map<T, Long> count) {
         final Map<T, Double> results = calculators.keySet().stream().map(calculator -> {
-            final Map<T, Double> result = calculator.calculate(vertexes);
+            final Map<T, Double> result = calculator.calculate(graph, count);
             return result.keySet()
                     .stream()
                     .collect(Collectors.toMap(k -> k, k -> result.get(k) * calculators.get(calculator)));

@@ -1,20 +1,19 @@
 package io.aif.associations.model;
 
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public interface IGraph<V, E> {
+public interface IGraph<V> {
 
     public Set<V> getVertex();
 
     public Set<V> getNeighbors(final V vertex);
 
-    public Optional<E> getEdge(final V from, final V to);
+    public OptionalDouble getEdgeWeight(final V from, final V to);
+
+    public Double getVertexWeight(final V vertex);
 
     public boolean isEmpty();
 

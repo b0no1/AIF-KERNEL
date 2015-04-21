@@ -5,12 +5,12 @@ import io.aif.associations.calculators.vertex.CompositeWeightCalculator;
 import io.aif.associations.calculators.vertex.ConnectionBasedWeightCalculator;
 import io.aif.associations.calculators.vertex.IVertexWeightCalculator;
 import io.aif.associations.graph.AssociationGraph;
-import io.aif.associations.graph.INodeWithCount;
 import io.aif.associations.model.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class AssociationsGraphBuilder<T> implements IAssociationsGraphBuilder<T> {
     
@@ -33,14 +33,17 @@ public class AssociationsGraphBuilder<T> implements IAssociationsGraphBuilder<T>
     }
 
     @Override
-    public IGraph<IAssociationVertex<T>, IAssociationEdge> buildGraph(final List<T> experiments) {
+    public IGraph<T> buildGraph(final List<T> experiments) {
 
-        final IGraph<INodeWithCount<T>, Double> experimentsConnectionsGraph = experimentsConnectionsGraphBuilder.build(experiments);
+        final Map<T, Map<T, Double>> experimentsConnectionsGraph = experimentsConnectionsGraphBuilder.build(experiments);
+        final Map<T, Long> count = experimentsConnectionsGraph.keySet().stream().collect(Collectors.toMap(
+            k -> k, v -> experiments.stream().filter(v::equals).count()
+        ));
 
         final CompositeWeightCalculator<T> compositeWeightCalculator = new CompositeWeightCalculator<>(calculators);
         compositeWeightCalculator.add(new ConnectionBasedWeightCalculator<>(), 1.);
 
-        return AssociationGraph.generateGraph(experimentsConnectionsGraph, compositeWeightCalculator);
+        return AssociationGraph.generateGraph(experimentsConnectionsGraph, count, compositeWeightCalculator);
     }
     
 }
