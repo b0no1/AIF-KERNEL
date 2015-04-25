@@ -46,20 +46,22 @@ public class ConnectionBasedWeightCalculatorTest {
         graph.put(1, new HashMap<Integer, Double>() {{
             put(2, .8);
         }});
+        graph.put(2, Collections.emptyMap());
 
         final Map<Integer, Long> count = new HashMap<>();
         count.put(1, 1l);
         count.put(2, 1l);
 
         final Map<Integer, Double> expectedResult = new HashMap<Integer, Double>(){{
-            put(element, 0.8999999999999999);
+            put(element, 1.);
             put(element2, .0);
         }};
 
         final ConnectionBasedWeightCalculator<Integer> connectionBasedWeightCalculator = new ConnectionBasedWeightCalculator<>();
 
+        final Map<Integer, Double> actualResult =connectionBasedWeightCalculator.calculate(graph, count);
 
-        assertEquals(connectionBasedWeightCalculator.calculate(graph, count), expectedResult);
+        assertEquals(actualResult, expectedResult);
     }
 
 }

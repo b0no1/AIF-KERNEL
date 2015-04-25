@@ -1,6 +1,5 @@
 package io.aif.associations.builder;
 
-import io.aif.associations.model.IGraph;
 import org.junit.Test;
 
 import java.util.*;

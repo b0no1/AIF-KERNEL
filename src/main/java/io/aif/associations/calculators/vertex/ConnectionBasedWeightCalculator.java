@@ -11,13 +11,14 @@ public class ConnectionBasedWeightCalculator<T> implements IVertexWeightCalculat
         final Map<T, Double> weights = graph.keySet().stream().collect(Collectors.toMap(k -> k, k -> calculate(k, graph, count)));
         final Optional<Double> optMax = weights.values().stream().max(Double::compare);
         if (!optMax.isPresent()) return Collections.emptyMap();
+        if (optMax.get() == .0) {
+           return weights.keySet().stream().collect(Collectors.toMap(k -> k, k -> .0));
+        }
         return weights.keySet().stream().collect(Collectors.toMap(k -> k, k -> weights.get(k) / optMax.get()));
     }
 
     private double calculate(final T vertex, final Map<T, Map<T, Double>> graph, final Map<T, Long> count) {
-        if (!graph.get(vertex).keySet().isEmpty()) return .0;
-
-        if (graph.get(vertex).keySet().size() <= 2) return .0;
+        if (graph.get(vertex).keySet().isEmpty()) return .0;
 
         final OptionalDouble optAverageWeight = graph.get(vertex).keySet().stream()
                 .mapToDouble(neighbor -> graph.get(vertex).get(neighbor))
