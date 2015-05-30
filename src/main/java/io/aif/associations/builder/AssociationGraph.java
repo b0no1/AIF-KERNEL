@@ -1,21 +1,23 @@
-package io.aif.associations.graph;
+package io.aif.associations.builder;
 
 
 import io.aif.associations.calculators.vertex.IVertexWeightCalculator;
-import io.aif.associations.model.IGraph;
+import io.aif.graph.IGraph;
+import io.aif.graph.IGraphBuilder;
+import io.aif.graph.VertexNotFoundException;
 
 import java.util.*;
 
-public class AssociationGraph<T> implements IGraph<T> {
+public class AssociationGraph<T> implements IGraph<T, Double> {
 
-    private final Map<T, Map<T, Double>> graph;
+    private final IGraph<T, Double> graph;
 
     private final Map<T, Double> weights;
 
     private AssociationGraph(final Map<T, Map<T, Double>> graph,
                              final Map<T, Long> count,
                              final IVertexWeightCalculator<T> vertexWeightCalculator) {
-        this.graph = graph;
+        this.graph = IGraphBuilder.build(graph);
         weights = vertexWeightCalculator.calculate(graph, count);
     }
 
@@ -26,22 +28,20 @@ public class AssociationGraph<T> implements IGraph<T> {
     }
 
     @Override
-    public Set<T> getVertex() {
-        return graph.keySet();
+    public Set<T> getVertices() {
+        return graph.getVertices();
     }
 
     @Override
-    public Set<T> getNeighbors(final T vertex) {
-        return graph.get(vertex).keySet();
+    public Set<T> getNeighbors(final T vertex) throws VertexNotFoundException {
+        return graph.getNeighbors(vertex);
     }
 
     @Override
-    public OptionalDouble getEdgeWeight(final T from, final T to) {
-        if (!graph.get(from).containsKey(to)) return OptionalDouble.empty();
-        return OptionalDouble.of(graph.get(from).get(to));
+    public Optional<Double> getEdge(final T from, final T to) throws VertexNotFoundException {
+        return graph.getEdge(from, to);
     }
 
-    @Override
     public Double getVertexWeight(final T vertex) {
         return weights.get(vertex);
     }

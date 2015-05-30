@@ -4,7 +4,6 @@ package io.aif.associations.builder;
 import io.aif.associations.calculators.vertex.CompositeWeightCalculator;
 import io.aif.associations.calculators.vertex.ConnectionBasedWeightCalculator;
 import io.aif.associations.calculators.vertex.IVertexWeightCalculator;
-import io.aif.associations.graph.AssociationGraph;
 import io.aif.associations.model.*;
 
 import java.util.HashMap;
@@ -33,7 +32,7 @@ public class AssociationsGraphBuilder<T> implements IAssociationsGraphBuilder<T>
     }
 
     @Override
-    public IGraph<T> buildGraph(final List<T> experiments) {
+    public AssociationGraph<T> buildGraph(final List<T> experiments) {
 
         final Map<T, Map<T, Double>> experimentsConnectionsGraph = experimentsConnectionsGraphBuilder.build(experiments);
         final Map<T, Long> count = experimentsConnectionsGraph.keySet().stream().collect(Collectors.toMap(

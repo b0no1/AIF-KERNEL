@@ -1,12 +1,13 @@
 package io.aif.associations.model;
 
 
-import java.util.Collection;
+import io.aif.associations.builder.AssociationGraph;
+
 import java.util.List;
 
 @FunctionalInterface
 public interface IAssociationsGraphBuilder<T> {
     
-    public IGraph<T> buildGraph(final List<T> experiments);
+    public AssociationGraph<T> buildGraph(final List<T> experiments);
     
 }
