@@ -4,7 +4,7 @@ package io.aif.graph;
 import java.util.HashMap;
 import java.util.Map;
 
-class MapBasedGrpahBuilder<V, E> implements IGraphBuilder<V, E>{
+class MapBasedGraphBuilder<V, E> implements IGraphBuilder<V, E>{
 
     private final Map<V, Map<V, E>> g = new HashMap<>();
 

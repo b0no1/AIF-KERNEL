@@ -11,7 +11,7 @@ public interface IGraphBuilder<V, E> {
     public void connect(final V from, final V to, final E edge);
 
     public static <V, E>IGraphBuilder<V, E> defaultBuilder() {
-        return new MapBasedGrpahBuilder<>();
+        return new MapBasedGraphBuilder<>();
     }
 
     public static <V, E>IGraph<V, E> build(final Map<V, Map<V, E>> g) {

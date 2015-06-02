@@ -21,9 +21,9 @@ public class GraphTest {
 
         final Set<Object> expected = new HashSet<>(Arrays.asList(vertex2, vertex3));
 
-        final IGraphBuilder<Object, Boolean> graphBuilder = IGraphBuilder.defaultBuilder();
-        graphBuilder.connect(vertex1, vertex2, true);
-        graphBuilder.connect(vertex1, vertex3, true);
+        final ISimpleGraphBuilder<Object> graphBuilder = ISimpleGraphBuilder.defaultBuilder();
+        graphBuilder.connect(vertex1, vertex2);
+        graphBuilder.connect(vertex1, vertex3);
         final IGraph<Object, Boolean> graph = graphBuilder.build();
 
         final Set<Object> actual = graph.getNeighbors(vertex1);
@@ -38,8 +38,8 @@ public class GraphTest {
         final Set<Object> expected = new HashSet<>();
         expected.add(null);
 
-        final IGraphBuilder<Object, Boolean> graphBuilder = IGraphBuilder.defaultBuilder();
-        graphBuilder.connect(vertex1, null, true);
+        final ISimpleGraphBuilder<Object> graphBuilder = ISimpleGraphBuilder.defaultBuilder();
+        graphBuilder.connect(vertex1, null);
         Set<Object> actual = graphBuilder.build().getNeighbors(vertex1);
 
         assertEquals(actual, expected);
@@ -51,7 +51,7 @@ public class GraphTest {
 
         final Set<Object> expected = new HashSet<>(Arrays.asList(vertex1));
 
-        final IGraphBuilder<Object, Boolean> graphBuilder = IGraphBuilder.defaultBuilder();
+        final ISimpleGraphBuilder<Object> graphBuilder = ISimpleGraphBuilder.defaultBuilder();
         graphBuilder.add(vertex1);
         final Set<Object> actual = graphBuilder.build().getVertices();
 
@@ -63,7 +63,7 @@ public class GraphTest {
         Set<Object> expected = new HashSet<>();
         expected.add(null);
 
-        final IGraphBuilder<Object, Boolean> graphBuilder = IGraphBuilder.defaultBuilder();
+        final ISimpleGraphBuilder<Object> graphBuilder = ISimpleGraphBuilder.defaultBuilder();
         graphBuilder.add(null);
         final Set<Object> actual = graphBuilder.build().getVertices();
 
@@ -73,7 +73,7 @@ public class GraphTest {
     @Test
     public void testGetNeighboursEmptyGraph() throws Exception {
         final Object vertex1 = mock(Object.class);
-        final IGraphBuilder<Object, Boolean> graphBuilder = IGraphBuilder.defaultBuilder();
+        final ISimpleGraphBuilder<Object> graphBuilder = ISimpleGraphBuilder.defaultBuilder();
         final IGraph<Object, Boolean> graph = graphBuilder.build();
         try {
             graph.getNeighbors(vertex1);
@@ -88,7 +88,7 @@ public class GraphTest {
         final Object vertex3 = mock(Object.class);
         final Object vertex4 = mock(Object.class);
 
-        final IGraphBuilder<Object, Boolean> graphBuilder = IGraphBuilder.defaultBuilder();
+        final ISimpleGraphBuilder<Object> graphBuilder = ISimpleGraphBuilder.defaultBuilder();
         graphBuilder.connect(vertex1, vertex2, true);
         graphBuilder.connect(vertex1, vertex3, true);
         final IGraph<Object, Boolean> graph = graphBuilder.build();
@@ -105,7 +105,7 @@ public class GraphTest {
         final Object vertex3 = mock(Object.class);
         final Object vertex4 = mock(Object.class);
 
-        final IGraphBuilder<Object, Boolean> graphBuilder = IGraphBuilder.defaultBuilder();
+        final ISimpleGraphBuilder<Object> graphBuilder = ISimpleGraphBuilder.defaultBuilder();
         graphBuilder.connect(vertex1, vertex2, true);
         graphBuilder.connect(vertex1, vertex3, true);
         graphBuilder.add(vertex4);
@@ -122,7 +122,7 @@ public class GraphTest {
 
         final Set<Object> expected = new HashSet<>(Arrays.asList(vertex1, vertex2, vertex3, vertex4));
 
-        final IGraphBuilder<Object, Boolean> graphBuilder = IGraphBuilder.defaultBuilder();
+        final ISimpleGraphBuilder<Object> graphBuilder = ISimpleGraphBuilder.defaultBuilder();
         graphBuilder.connect(vertex1, vertex2, true);
         graphBuilder.connect(vertex1, vertex3, true);
         graphBuilder.add(vertex4);
@@ -133,7 +133,7 @@ public class GraphTest {
 
     @Test
     public void testGetAllEmptyGraph() throws Exception {
-        final IGraphBuilder<Object, Boolean> graphBuilder = IGraphBuilder.defaultBuilder();
+        final ISimpleGraphBuilder<Object> graphBuilder = ISimpleGraphBuilder.defaultBuilder();
         assertEquals(graphBuilder.build().isEmpty(), true);
     }
     
