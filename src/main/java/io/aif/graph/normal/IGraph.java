@@ -1,5 +1,7 @@
-package io.aif.graph;
+package io.aif.graph.normal;
 
+
+import io.aif.graph.VertexNotFoundException;
 
 import java.util.*;
 

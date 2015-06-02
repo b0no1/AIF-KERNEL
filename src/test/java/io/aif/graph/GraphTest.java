@@ -1,5 +1,7 @@
 package io.aif.graph;
 
+import io.aif.graph.normal.IGraph;
+import io.aif.graph.simple.ISimpleGraphBuilder;
 import org.junit.Test;
 
 import java.util.Arrays;

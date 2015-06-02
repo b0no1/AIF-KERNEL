@@ -1,4 +1,4 @@
-package io.aif.graph;
+package io.aif.graph.normal;
 
 import java.util.Map;
 

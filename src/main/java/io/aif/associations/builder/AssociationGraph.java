@@ -2,8 +2,8 @@ package io.aif.associations.builder;
 
 
 import io.aif.associations.calculators.vertex.IVertexWeightCalculator;
-import io.aif.graph.IGraph;
-import io.aif.graph.IGraphBuilder;
+import io.aif.graph.normal.IGraph;
+import io.aif.graph.normal.IGraphBuilder;
 import io.aif.graph.VertexNotFoundException;
 
 import java.util.*;

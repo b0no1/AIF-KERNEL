@@ -1,12 +1,12 @@
-package io.aif.graph;
+package io.aif.graph.normal;
 
 
 import java.util.HashMap;
 import java.util.Map;
 
-class MapBasedGraphBuilder<V, E> implements IGraphBuilder<V, E>{
+public class MapBasedGraphBuilder<V, E> implements IGraphBuilder<V, E>{
 
-    private final Map<V, Map<V, E>> g = new HashMap<>();
+    protected final Map<V, Map<V, E>> g = new HashMap<>();
 
     public synchronized void connect(final V from, final V to, final E edge) {
         if (!g.containsKey(from)) {

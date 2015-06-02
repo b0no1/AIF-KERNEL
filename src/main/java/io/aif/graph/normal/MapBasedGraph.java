@@ -1,8 +1,10 @@
-package io.aif.graph;
+package io.aif.graph.normal;
+
+import io.aif.graph.VertexNotFoundException;
 
 import java.util.*;
 
-class MapBasedGraph<V, E> implements IGraph<V, E> {
+public class MapBasedGraph<V, E> implements IGraph<V, E> {
 
     private final Map<V, Map<V, E>> g;
 
