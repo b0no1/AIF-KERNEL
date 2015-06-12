@@ -1,4 +1,4 @@
-package io.aif.common;
+package io.aif.fuzzy;
 
 public class FuzzyBoolean {
 
