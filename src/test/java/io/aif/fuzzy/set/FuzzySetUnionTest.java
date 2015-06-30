@@ -1,6 +1,7 @@
-package io.aif.fuzzy;
+package io.aif.fuzzy.set;
 
 
+import io.aif.fuzzy.bool.FuzzyBoolean;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;

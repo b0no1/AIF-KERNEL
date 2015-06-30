@@ -1,5 +1,7 @@
-package io.aif.fuzzy;
+package io.aif.fuzzy.set;
 
+
+import io.aif.fuzzy.bool.FuzzyBoolean;
 
 public interface IFuzzySet<T> {
 

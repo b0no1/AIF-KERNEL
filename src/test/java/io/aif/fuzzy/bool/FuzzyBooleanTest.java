@@ -1,6 +1,5 @@
-package io.aif.fuzzy;
+package io.aif.fuzzy.bool;
 
-import io.aif.fuzzy.FuzzyBoolean;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

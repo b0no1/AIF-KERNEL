@@ -1,6 +1,8 @@
-package io.aif.fuzzy;
+package io.aif.fuzzy.bool;
 
 public class FuzzyBoolean {
+
+    public static final FuzzyBoolean FALSE = new FuzzyBoolean(.0);
 
     private static final double DEFAULT_TRUTH_THRESHOLD = .5;
 
