@@ -4,7 +4,7 @@
   <groupId>io.aif</groupId>
   <artifactId>aif-kernel</artifactId>
   <packaging>jar</packaging>
-  <version>1.0</version>
+  <version>1.1</version>
   <name>aif-kernel</name>
   <url>http://maven.apache.org</url>
     
