@@ -5,7 +5,7 @@ import io.aif.fuzzy.graph.IFuzzyGraph;
 
 import java.util.Optional;
 
-public class NodesOnTheGraphSimilarityCalculator<T> implements ISimilarityCalculator<T> {
+public class GraphsEdgeSimilarityCalculator<T> implements ISimilarityCalculator<T> {
 
     private final IFuzzyGraph<T> left;
 
@@ -13,7 +13,7 @@ public class NodesOnTheGraphSimilarityCalculator<T> implements ISimilarityCalcul
 
     private final double similarityThreshold;
 
-    public NodesOnTheGraphSimilarityCalculator(
+    public GraphsEdgeSimilarityCalculator(
             final IFuzzyGraph<T> left,
             final IFuzzyGraph<T> right,
             double similarityThreshold) {

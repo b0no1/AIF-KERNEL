@@ -22,7 +22,7 @@ public class GraphSimilarityCalculator<T> implements ISimilarityCalculator<IFuzz
             return similar(right, left);
         }
         final ISimilarityCalculator<T> nodeSimilarityCalculator =
-                new NodesOnTheGraphSimilarityCalculator<>(left, right, similarityThreshold);
+                new GraphsEdgeSimilarityCalculator<>(left, right, similarityThreshold);
         final List<FuzzyBoolean> allCombinations = left
                 .getVertices()
                 .stream()
