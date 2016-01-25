@@ -2,11 +2,8 @@ package io.aif.algorithms.graph.fuzzy.similarity;
 
 import io.aif.fuzzy.bool.FuzzyBoolean;
 import io.aif.fuzzy.graph.IFuzzyGraph;
-import io.aif.graph.normal.IGraph;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.TestRule;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -67,10 +64,10 @@ public class ISimilarityCalculatorTest {
 
     @Test
     public void testSimpleSimilarityCalculator() {
-        testGraphs(new SimpleSimilarityCalculator<>(0.2));
+        testGraphs(new GraphSimilarityCalculator<>(0.2));
     }
 
-    private void testGraphs(final ISimilarityCalculator<String> calculator) {
+    private void testGraphs(final ISimilarityCalculator<IFuzzyGraph<String>> calculator) {
         final FuzzyBoolean result = calculator.similar(left, right);
         assertEquals(0.5, result.getValue(), .01);
     }

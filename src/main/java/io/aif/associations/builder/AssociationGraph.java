@@ -2,13 +2,15 @@ package io.aif.associations.builder;
 
 
 import io.aif.associations.calculators.vertex.IVertexWeightCalculator;
+import io.aif.fuzzy.bool.FuzzyBoolean;
+import io.aif.fuzzy.graph.IFuzzyGraph;
 import io.aif.graph.normal.IGraph;
 import io.aif.graph.normal.IGraphBuilder;
 import io.aif.graph.VertexNotFoundException;
 
 import java.util.*;
 
-public class AssociationGraph<T> implements IGraph<T, Double> {
+public class AssociationGraph<T> implements IFuzzyGraph<T> {
 
     private final IGraph<T, Double> graph;
 
@@ -38,8 +40,9 @@ public class AssociationGraph<T> implements IGraph<T, Double> {
     }
 
     @Override
-    public Optional<Double> getEdge(final T from, final T to) {
-        return graph.getEdge(from, to);
+    public Optional<FuzzyBoolean> getEdge(final T from, final T to) {
+        // TODO there should be a way to use non default thershold for the FuzzyBoolean here
+        return graph.getEdge(from, to).map(FuzzyBoolean::new);
     }
 
     public Double getVertexWeight(final T vertex) {

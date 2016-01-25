@@ -61,7 +61,7 @@ public class AssociationsGraphBuilderTest {
 
         assertTrue(result.getEdge(firstVertex, secondVertex).isPresent());
         assertFalse(result.getEdge(secondVertex, firstVertex).isPresent());
-        assertEquals((Double) result.getEdge(firstVertex, secondVertex).get(), (Double) 1.);
+        assertEquals((Double) result.getEdge(firstVertex, secondVertex).get().getValue(), (Double) 1.);
 
     }
 
