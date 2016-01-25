@@ -18,17 +18,20 @@ public class MapBasedGraph<V, E> implements IGraph<V, E> {
     }
 
     @Override
-    public Set<V> getNeighbors(final V vertex) throws VertexNotFoundException {
+    public Set<V> getNeighbors(final V vertex) {
         if (!g.containsKey(vertex)) {
-            throw new VertexNotFoundException();
+            Collections.emptySet();
+        }
+        if (g.get(vertex) == null) {
+            return Collections.emptySet();
         }
         return g.get(vertex).keySet();
     }
 
     @Override
-    public Optional<E> getEdge(final V from, final V to) throws VertexNotFoundException {
+    public Optional<E> getEdge(final V from, final V to) {
         if (!g.containsKey(from) || ! g.containsKey(to)) {
-            throw new VertexNotFoundException();
+            Collections.emptySet();
         }
         if (!g.get(from).containsKey(to)) {
             return Optional.empty();

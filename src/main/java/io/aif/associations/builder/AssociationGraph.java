@@ -33,12 +33,12 @@ public class AssociationGraph<T> implements IGraph<T, Double> {
     }
 
     @Override
-    public Set<T> getNeighbors(final T vertex) throws VertexNotFoundException {
+    public Set<T> getNeighbors(final T vertex) {
         return graph.getNeighbors(vertex);
     }
 
     @Override
-    public Optional<Double> getEdge(final T from, final T to) throws VertexNotFoundException {
+    public Optional<Double> getEdge(final T from, final T to) {
         return graph.getEdge(from, to);
     }
 

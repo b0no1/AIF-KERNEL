@@ -40,14 +40,9 @@ public class DFS<T> {
         }
 
         final Set<T> neighbours;
-        try {
-            neighbours = graph.getNeighbors(last);
-            if (neighbours.isEmpty())
-                return result;
-        } catch (VertexNotFoundException e) {
-            e.printStackTrace();
+        neighbours = graph.getNeighbors(last);
+        if (neighbours.isEmpty())
             return result;
-        }
 
         return neighbours
                 .stream()

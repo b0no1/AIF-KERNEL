@@ -77,10 +77,8 @@ public class GraphTest {
         final Object vertex1 = mock(Object.class);
         final ISimpleGraphBuilder<Object> graphBuilder = ISimpleGraphBuilder.defaultBuilder();
         final IGraph<Object, Boolean> graph = graphBuilder.build();
-        try {
-            graph.getNeighbors(vertex1);
-            fail();
-        } catch (final VertexNotFoundException e) {}
+        final Set result = graph.getNeighbors(vertex1);
+        assertTrue(result.isEmpty());
     }
 
     @Test
@@ -94,10 +92,8 @@ public class GraphTest {
         graphBuilder.connect(vertex1, vertex2, true);
         graphBuilder.connect(vertex1, vertex3, true);
         final IGraph<Object, Boolean> graph = graphBuilder.build();
-        try {
-            graph.getNeighbors(vertex4);
-            fail();
-        } catch (final VertexNotFoundException e) {}
+        final Set result = graph.getNeighbors(vertex4);
+        assertTrue(result.isEmpty());
     }
 
     @Test

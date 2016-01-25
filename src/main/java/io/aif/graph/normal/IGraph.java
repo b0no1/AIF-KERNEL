@@ -9,9 +9,9 @@ public interface IGraph<V, E> {
 
     public Set<V> getVertices();
 
-    public Set<V> getNeighbors(final V vertex) throws VertexNotFoundException;
+    public Set<V> getNeighbors(final V vertex);
 
-    public Optional<E> getEdge(final V from, final V to) throws VertexNotFoundException;
+    public Optional<E> getEdge(final V from, final V to);
 
     public boolean isEmpty();
 
