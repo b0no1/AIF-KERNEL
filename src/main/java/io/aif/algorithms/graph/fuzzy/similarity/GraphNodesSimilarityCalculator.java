@@ -14,11 +14,15 @@ public class GraphNodesSimilarityCalculator<T> implements ISimilarityCalculator<
 
     private final double similarityThreshold;
 
+    private final double percentile;
+
     public GraphNodesSimilarityCalculator(
             final IFuzzyGraph<T> graph,
-            double similarityThreshold) {
+            final double similarityThreshold,
+            final double percentile) {
         this.graph = graph;
         this.similarityThreshold = similarityThreshold;
+        this.percentile = percentile;
     }
 
     @Override
@@ -26,22 +30,22 @@ public class GraphNodesSimilarityCalculator<T> implements ISimilarityCalculator<
         if (graph.getNeighbors(left).size() > graph.getNeighbors(right).size()) {
             return similar(right, left);
         }
-        final List<FuzzyBoolean> resutls = graph
+        final List<FuzzyBoolean> results = graph
                 .getNeighbors(left)
                 .stream()
+                .sorted((v1, v2) -> Double.compare(graph.getEdge(left, v2).get().getValue(), graph.getEdge(left, v1).get().getValue()))
+                .limit((int)((double)graph.getNeighbors(left).size() * percentile))
                 .map(v -> similarEdge(left, right, v))
                 .collect(Collectors.toList());
 
-        final OptionalDouble result = resutls
+        final double sum = results
                 .stream()
                 .filter(FuzzyBoolean::isTrue)
                 .distinct()
                 .mapToDouble(FuzzyBoolean::getValue)
-                .average();
-        if (result.isPresent()) {
-            return new FuzzyBoolean(result.getAsDouble(), similarityThreshold);
-        }
-        return new FuzzyBoolean(0, similarityThreshold);
+                .sum();
+        final double result = sum / results.size();
+        return new FuzzyBoolean(result, similarityThreshold);
     }
 
     private FuzzyBoolean similarEdge(final T from1, final T from2, final T to) {
